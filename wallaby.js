@@ -2,11 +2,11 @@ module.exports = function (w) {
 
   return {
     files: [
-      './**/*src.ts'
+      './**/listing1.1.src.ts'
     ],
 
     tests: [
-      './**/*spec.ts'
+      './**/listing1.3.spec.ts'
     ],
 
     env: {
