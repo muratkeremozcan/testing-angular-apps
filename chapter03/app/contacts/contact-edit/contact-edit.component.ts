@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 import {
   Contact,
   ContactService,
-} from '../../shared';
+} from '../shared';
 import { constants } from './contact-edit.constants';
-import { InvalidEmailModalComponent } from '../../shared';
-import { InvalidPhoneNumberModalComponent } from '../../shared';
-import { countryDialingCodes } from '../../shared';
+import { InvalidEmailModalComponent } from '../shared';
+import { InvalidPhoneNumberModalComponent } from '../shared';
+import { countryDialingCodes } from '../shared';
 
 @Component({
   selector: 'app-contact-edit',

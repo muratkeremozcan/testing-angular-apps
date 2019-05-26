@@ -45,3 +45,5 @@ cypress/screenshots/*
 .DS_Store
 Thumbs.db
 
+/website
+
