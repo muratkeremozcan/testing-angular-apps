@@ -5,7 +5,8 @@ module.exports = function (w) {
       './**/listing1.1.src.ts',
       './**/contact.ts',
       './**/contacts.component.ts',
-      './chapter03/app/contacts/contact-edit/contact-edit.component.spec.ts'
+      './website/src/app/contacts/contact-edit/contact-edit.component.spec.ts',
+      './website/src/app/contacts/shared/favorite-icon/favorite-icon.directive.ts'
 
     ],
 
@@ -13,7 +14,8 @@ module.exports = function (w) {
       './**/listing1.3.spec.ts',
       './**/listing2.3.spec.ts',
       './**/contacts.component.spec.ts',
-      './chapter03/app/contacts/contact-edit/contact-edit.component.ts'
+      './website/src/app/contacts/contact-edit/contact-edit.component.ts',
+      './website/src/app/contacts/shared/favorite-icon/favorite-icon.directive.spec.ts'
     ],
 
     env: {
