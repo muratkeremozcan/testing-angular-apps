@@ -1,11 +1,12 @@
-import { DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core'; // to inspect an element during testing
+// to create fixture, ensure all async tasks are complete before assertions, to setup and config tests, simulate time
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { By } from '@angular/platform-browser'; // to select DOM elements
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'; // to mock animations
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing'; // bootstrap the browser for testing
+import { RouterTestingModule } from '@angular/router/testing'; // to setup routing for testing
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // ContactEditComponent uses it for form controls
 
 import { Contact, ContactService, FavoriteIconDirective, InvalidEmailModalComponent, InvalidPhoneNumberModalComponent } from '../shared';
 import { AppMaterialModule } from '../../app.material.module';
@@ -14,32 +15,42 @@ import { ContactEditComponent } from './contact-edit.component';
 import '../../../material-app-theme.scss';
 
 describe('ContactEditComponent tests', () => {
+  // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
+    // use the ComponentFixture class to debug an element
   let fixture: ComponentFixture<ContactEditComponent>;
-  let component: ContactEditComponent;
-  let rootElement: DebugElement;
+  let component: ContactEditComponent; // stores an instance of the ContactEditComponent
+  let rootElement: DebugElement; // stores the DebugElement for the component, which is how we access its children
+  // you can think of DebugElement as the HTMLElement with methods and properties that can be useful for debugging elements
 
+  /* mock: simulates the real object, keeps track of when the object is called and the arguments it receives
+  stub: simpler fake of the real object, no logic, always returns the same value
+
+  Mock contactService: contactService makes http calls which would make the tests harder to run and non-deterministic
+  we only want to really test ContactEditComponent, so we mock contactService */
   const contactServiceStub = {
     contact: {
       id: 1,
       name: 'janet'
     },
 
-    save: async function (contact: Contact) {
+    save: async function (contact: Contact) { // sets the passed-in object to the component's contact property
       component.contact = contact;
     },
 
-    getContact: async function () {
+    getContact: async function () { // method that sets the current contact as the component's contact property and returns that contact
       component.contact = this.contact;
       return this.contact;
     },
 
-    updateContact: async function (contact: Contact) {
+    updateContact: async function (contact: Contact) { // method that updates the contact object
       component.contact = contact;
     }
   };
 
+  // sets TestBed configuration. TestBed is a class that you use to setup and configure your tests.
+    // use it any time you want to write a unit test that tests components, directives and services
   beforeEach(() => {
-    TestBed.configureTestingModule({
+    TestBed.configureTestingModule({  // configure the test bed to be used in the tests
       declarations: [ContactEditComponent, FavoriteIconDirective, InvalidEmailModalComponent, InvalidPhoneNumberModalComponent],
       imports: [
         AppMaterialModule,
@@ -47,78 +58,103 @@ describe('ContactEditComponent tests', () => {
         NoopAnimationsModule,
         RouterTestingModule
       ],
-      providers: [{provide: ContactService, useValue: contactServiceStub}]
+      // this is where contactServiceStub is used instead of the real service
+      providers: [{ provide: ContactService, useValue: contactServiceStub }]
     });
-  
+
     TestBed.overrideModule(BrowserDynamicTestingModule, {
+      /* overrideModule is used to lazy load some components. Lazy load means dialogs won't be loaded until the user performs an action to
+         currently, the only way to do this is to use overrideModule and set entryComponents value to an array that contains
+         the two modal components that ContactEditComponent uses: InvalidEmailModalComponent and InvalidPhoneNumberModalComponent */
       set: {
         entryComponents: [InvalidEmailModalComponent, InvalidPhoneNumberModalComponent]
       }
     });
   });
 
+  // sets instance variables
   beforeEach(() => {
+    // fixture variable stores the component-like object from the TestBed.createComponent method
     fixture = TestBed.createComponent(ContactEditComponent);
+    // component variable holds a component that you get from your fixture using the componentInstance property
     component = fixture.componentInstance;
+    // detectChanges triggers a change detection cycle for the component. In Prod Angular uses Zones when to run change detection,
+      // in unit tests we use detectChanges
     fixture.detectChanges();
     rootElement = fixture.debugElement;
   });
 
+  // saveContact() changes the component's state, which will be reflected in the DOM
   describe('saveContact() test', () => {
+    // fakeAsync method is used to keep the tests from finishing until the component has finished updating
+      // ensures that all asynchronous calls are completed within a test before the assertions are executed
     it('should display contact name after contact set', fakeAsync(() => {
+      // create a contact object
       const contact = {
         id: 1,
         name: 'lorace'
       };
 
+      // set isLoading false to hide progress bar, otherwise all that will render is the loading progress bar
       component.isLoading = false;
-      component.saveContact(contact);
+      // normally saveContact would use the real ContactService
+        // but because you configured the testing module on line 50 to provide contactServiceStub, it will use the stub instead
+      component.saveContact(contact); // save the contact object
+      // after you make changes, you need to call detectChanges so that those changes are rendered in the DOM
       fixture.detectChanges();
-      const nameInput = rootElement.query(By.css('.contact-name'));
-      tick();
-      expect(nameInput.nativeElement.value).toBe('lorace');
+      // query rootElement (defined at line 21) by using by.css for the contact-name class
+        // to get the input element that contains the contact name
+      const nameInput = rootElement.query(By.css('.contact-name')); // gets the nameInput form field
+      tick(); // simulate the passage of time
+      // nativeElement object is an Angular wrapper around the built-in DOM native element
+      expect(nameInput.nativeElement.value).toBe('lorace'); // check to see if the name property has been set correctly
     }));
   });
 
   describe('loadContact() test', () => {
     it('should load contact', fakeAsync(() => {
       component.isLoading = false;
+      // here the only difference is that instead of saveContact, loadContact is used
       component.loadContact();
       fixture.detectChanges();
       const nameInput = rootElement.query(By.css('.contact-name'));
       tick();
-      expect(nameInput.nativeElement.value).toBe('janet');
+      expect(nameInput.nativeElement.value).toBe('janet');  // assert that the default contact loaded has this value
     }));
   });
 
   describe('updateContact() tests', () => {
     it('should update the contact', fakeAsync(() => {
+      // this time you set a contact and then update it
       const newContact = {
         id: 1,
         name: 'delia',
         email: 'delia@example.com',
         number: '1234567890'
       };
-  
+
       component.contact = {
         id: 2,
         name: 'rhonda',
         email: 'rhonda@example.com',
         number: '1234567890'
       };
-  
+
+      // test the inial contact
       component.isLoading = false;
       fixture.detectChanges();
       const nameInput = rootElement.query(By.css('.contact-name'));
       tick();
       expect(nameInput.nativeElement.value).toBe('rhonda');
-  
-      component.updateContact(newContact);
-      fixture.detectChanges();
+
+      // the major difference in this test is that it uses a 2nd assertion
+      component.updateContact(newContact); // updates the existing contact to the newContact object
+      fixture.detectChanges(); // trigger change detection
       tick(100);
-      expect(nameInput.nativeElement.value).toBe('delia');
+      expect(nameInput.nativeElement.value).toBe('delia'); // check that the value in the nameInput form field has een changed
     }));
 
+    // test what happens when you try to update the contact with invalid data
     it('should not update the contact if email is invalid', fakeAsync(() => {
       const newContact = {
         id: 1,
@@ -134,12 +170,14 @@ describe('ContactEditComponent tests', () => {
         number: '1234567890'
       };
 
+      // initial check
       component.isLoading = false;
       fixture.detectChanges();
       const nameInput = rootElement.query(By.css('.contact-name'));
       tick();
       expect(nameInput.nativeElement.value).toBe('chauncey');
 
+      // once updated we do not expect a change because the new contact object is not valid
       component.updateContact(newContact);
       fixture.detectChanges();
       tick(100);
@@ -167,6 +205,7 @@ describe('ContactEditComponent tests', () => {
       tick();
       expect(nameInput.nativeElement.value).toBe('chauncey');
 
+      // once updated we do not expect a change because the new contact object is not valid
       component.updateContact(newContact);
       fixture.detectChanges();
       tick(100);
