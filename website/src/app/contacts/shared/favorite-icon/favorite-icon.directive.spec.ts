@@ -57,7 +57,7 @@ describe('Directive: FavoriteIconDirective', () => {
     });
     afterEach(() => { starElement = null; }); // reset starElement after each test
 
-    it('should display a solid gold start after the page loads', () => {
+    it('should display a solid gold star after the page loads', () => {
       // check that the element includes a solid gold star after the page loads
       expect(starElement.style.color).toBe('gold');
       // check that the colors list matches the colors in our elements list, using doClassesMatch helper method
@@ -65,6 +65,26 @@ describe('Directive: FavoriteIconDirective', () => {
         // returns true if the element has all the expected styles
         // the style classes for a solid star are stored in the constant expectedSolidStarList on line 22
       expect(doClassesMatch(starElement.classList, expectedSolidStarList)).toBeTruthy();
+    });
+
+    it('should display a solid gold star if the user rolls over the star', () => {
+      // use the Event class to create a mouseenter event to simulate user hovering over the star
+      const event = new Event('mouseenter');
+      // manually dispatch an event using the dispatchEvent method that is a part of every DOM element.
+      starElement.dispatchEvent(event);
+      // repeat the same assertions as the first test, because they should be true
+      expect(starElement.style.color).toBe('gold');
+      expect(doClassesMatch(starElement.classList, expectedSolidStarList)).toBeTruthy();
+    });
+
+    it('should display a black outline of a star after the user clicks on the star', () => {
+      // use the Event class to create a CLICK event
+      const event = new Event('click');
+      // manually dispatch an event using the dispatchEvent method that is a part of every DOM element.
+      starElement.dispatchEvent(event);
+      // the difference here is that we expect the star to be only an outline instead of a solid star
+      expect(starElement.style.color).toBe('black');
+      expect(doClassesMatch(starElement.classList, expectedOutlineStarList)).toBeTruthy();
     });
 
   });
