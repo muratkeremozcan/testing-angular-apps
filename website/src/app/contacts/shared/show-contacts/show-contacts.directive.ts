@@ -1,3 +1,4 @@
+// structural directive listing 4.2
 import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 
 /**

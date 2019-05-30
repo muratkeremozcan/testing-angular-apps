@@ -1,3 +1,6 @@
+// ATTRIBUTE DIRECTIVE TEST Listing 4.1
+// attribute directive changes the appearance of a DOM element
+
 // import Angular dependencies
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
@@ -5,7 +8,10 @@ import { ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/tes
 import { constants } from './favorite-icon.constants';
 import { FavoriteIconDirective } from './favorite-icon.directive';
 import { getStarElement, doClassesMatch } from '../../testing';
-// to test a directive you need a host component that uses it. Host component will have a different <i> element per test case
+
+// to test an attribute directive (changes the appearance of a DOM element, ex: background color when a user rolls over a row)
+  // you need a host component that uses it. Host component will have a different <i> element per test case.
+  // DISTINCT in ATTRIBUTE DIRECTIVE testing
 @Component({
   template: `
     <i [appFavoriteIcon] ="true"></i>
@@ -18,7 +24,7 @@ class TestComponent { }
 
 describe('Directive: FavoriteIconDirective', () => {
   // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
-  let fixture: ComponentFixture<any>;
+  let fixture: ComponentFixture<any>; // type is any because this is our made up component as opposed to testing a real one in COMPONENT T.
   const expectedSolidStarList = constants.classes.SOLID_STAR_STYLE_LIST; // an array of classes for a solid star
   const expectedOutlineStarList = constants.classes.OUTLINE_STAR_STYLE_LIST; // an array of classes for an outlined star
 
@@ -68,6 +74,7 @@ describe('Directive: FavoriteIconDirective', () => {
     });
 
     it('should display a solid gold star if the user rolls over the star', () => {
+      // events are DISTINCT to ATTRIBUTE TESTING
       // use the Event class to create a mouseenter event to simulate user hovering over the star
       const event = new Event('mouseenter');
       // manually dispatch an event using the dispatchEvent method that is a part of every DOM element.
@@ -78,6 +85,7 @@ describe('Directive: FavoriteIconDirective', () => {
     });
 
     it('should display a black outline of a star after the user clicks on the star', () => {
+      // events are DISTINCT to ATTRIBUTE TESTING
       // use the Event class to create a CLICK event
       const event = new Event('click');
       // manually dispatch an event using the dispatchEvent method that is a part of every DOM element.

@@ -1,13 +1,25 @@
-import { DebugElement } from '@angular/core'; // to inspect an element during testing
-// to create fixture, ensure all async tasks are complete before assertions, to setup and config tests, simulate time
+// COMPONENT TESTING Listing 3.3 3.4 3.5 3.6 3.7 3.8 3.9 3.10 3.11
+// a component is a chunk of reusable code that encapsulates certain functionality
+  // They are like directives, but they also include a view or HTML template
+
+// import Test dependencies included in Angular
+// DebugElement: to inspect an element during testing. DISTINCT in COMPONENT TESTING because of DOM validation
+import { DebugElement } from '@angular/core';
+// ComponentFixture: to create fixture
+// fakeAsync: ensure all async tasks are complete before assertions (distinct in COMPONENT TESTING because of DOM manipulation)
+// TestBed: to setup and config tests
+// tick: simulate time (distinct in COMPONENT TESTING because of DOM manipulation)
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser'; // to select DOM elements
+// by: to select DOM elements: provides 3 methods: all, css, directive.
+// the below are distinct in COMPONENT TESTING because of DOM manipulation
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'; // to mock animations
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing'; // bootstrap the browser for testing
 import { RouterTestingModule } from '@angular/router/testing'; // to setup routing for testing
 
+// import non-testing Angular module
 import { FormsModule } from '@angular/forms'; // ContactEditComponent uses it for form controls
-
+// import dependencies relevant to the project
 import { Contact, ContactService, FavoriteIconDirective, InvalidEmailModalComponent, InvalidPhoneNumberModalComponent } from '../shared';
 import { AppMaterialModule } from '../../app.material.module';
 import { ContactEditComponent } from './contact-edit.component';
@@ -17,7 +29,8 @@ import '../../../material-app-theme.scss';
 describe('ContactEditComponent tests', () => {
   // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
     // use the ComponentFixture class to debug an element
-  let fixture: ComponentFixture<ContactEditComponent>;
+  let fixture: ComponentFixture<ContactEditComponent>; // the type is ContactEditComponent which we import on line 25
+  // the component and rootElement are DISTINCT in COMPONENT TESTING
   let component: ContactEditComponent; // stores an instance of the ContactEditComponent
   let rootElement: DebugElement; // stores the DebugElement for the component, which is how we access its children
   // you can think of DebugElement as the HTMLElement with methods and properties that can be useful for debugging elements
@@ -51,6 +64,7 @@ describe('ContactEditComponent tests', () => {
     // use it any time you want to write a unit test that tests components, directives and services
   beforeEach(() => {
     TestBed.configureTestingModule({  // configure the test bed to be used in the tests
+      // there are a lot more declarations and imports in COMPONENT TESTING, also additionally there are providers
       declarations: [ContactEditComponent, FavoriteIconDirective, InvalidEmailModalComponent, InvalidPhoneNumberModalComponent],
       imports: [
         AppMaterialModule,
@@ -62,8 +76,10 @@ describe('ContactEditComponent tests', () => {
       providers: [{ provide: ContactService, useValue: contactServiceStub }]
     });
 
+
     TestBed.overrideModule(BrowserDynamicTestingModule, {
-      /* overrideModule is used to lazy load some components. Lazy load means dialogs won't be loaded until the user performs an action to
+      /* Distinct in COMPONENT TESTING:
+         overrideModule is used to lazy load some components. Lazy load means dialogs won't be loaded until the user performs an action to
          currently, the only way to do this is to use overrideModule and set entryComponents value to an array that contains
          the two modal components that ContactEditComponent uses: InvalidEmailModalComponent and InvalidPhoneNumberModalComponent */
       set: {
@@ -81,6 +97,8 @@ describe('ContactEditComponent tests', () => {
     // detectChanges triggers a change detection cycle for the component. In Prod Angular uses Zones when to run change detection,
       // in unit tests we use detectChanges
     fixture.detectChanges();
+    // this is distinct in COMPONENT TESTING because of DOM verification
+    // you can think of DebugElement as the HTMLElement with methods and properties that can be useful for debugging elements
     rootElement = fixture.debugElement;
   });
 
@@ -102,7 +120,7 @@ describe('ContactEditComponent tests', () => {
       component.saveContact(contact); // save the contact object
       // after you make changes, you need to call detectChanges so that those changes are rendered in the DOM
       fixture.detectChanges();
-      // query rootElement (defined at line 21) by using by.css for the contact-name class
+      // query rootElement (defined at lines 21 &` 87) by using by.css for the contact-name class
         // to get the input element that contains the contact name
       const nameInput = rootElement.query(By.css('.contact-name')); // gets the nameInput form field
       tick(); // simulate the passage of time
@@ -140,7 +158,7 @@ describe('ContactEditComponent tests', () => {
         number: '1234567890'
       };
 
-      // test the inial contact
+      // test the initial contact
       component.isLoading = false;
       fixture.detectChanges();
       const nameInput = rootElement.query(By.css('.contact-name'));

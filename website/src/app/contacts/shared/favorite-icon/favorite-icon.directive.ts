@@ -1,3 +1,5 @@
+// attribute directive test Listing 4.1
+
 import { Directive, ElementRef, Input, HostListener, OnInit, Renderer } from '@angular/core';
 
 import { constants } from './favorite-icon.constants';
