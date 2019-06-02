@@ -51,8 +51,7 @@ describe('PreferencesService', () => {
   describe('save preferences', () => {
 
     // uses inject to get BrowserStorageMock
-    it('should save a preference', inject([PreferencesService, BrowserStorage],
-      (service: PreferencesService, browserStorage: BrowserStorageMock) => {
+    it('should save a preference', inject([PreferencesService, BrowserStorage], (service: PreferencesService, browserStorage: BrowserStorageMock) => {
 
         // add a spy to browserStorage.setItem
         spyOn(browserStorage, 'setItem').and.callThrough();
@@ -63,11 +62,10 @@ describe('PreferencesService', () => {
       })
     );
 
-    it('saveProperty should require a non-zero length key', inject([PreferencesService],
-      (service: PreferencesService) => {
+    it('saveProperty should require a non-zero length key', inject([PreferencesService], (service: PreferencesService) => {
 
-        const throws = () => service.saveProperty({ key: '', value: '' });
-
+        // creates a wrapper for any function that's supposed to throw an error
+        const throws = () => service.saveProperty({ key: '', value: 'foo' });
         expect(throws).toThrowError();
       })
     );
