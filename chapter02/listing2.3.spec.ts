@@ -45,30 +45,30 @@ describe('Contact class tests', () => {
 
   it('should set and get name correctly', () => {
     // set name
-    contact.name = myContactInfo.name;
+    contact.name = myContactInfo.name; //?
     // get name
     expect(contact.name).toEqual(myContactInfo.name);
   });
 
   it('should set and get email correctly', () => {
     // set email
-    contact.email = myContactInfo.email;
+    contact.email = myContactInfo.email; //?
     // get email
     expect(contact.email).toEqual(myContactInfo.email);
   });
 
   it('should set and get number correctly', () => {
-    contact.number = myContactInfo.number;
+    contact.number = myContactInfo.number; //?
     expect(contact.number).toEqual(myContactInfo.number);
   });
 
   it('should set and get country correctly', () => {
-    contact.country = myContactInfo.country;
+    contact.country = myContactInfo.country; //?
     expect(contact.country).toEqual(myContactInfo.country);
   });
 
   it('should set and get favorite', () => {
-    contact.favorite = myContactInfo.favorite;
+    contact.favorite = myContactInfo.favorite; //?
     expect(contact.favorite).toBe(myContactInfo.favorite);
   });
 
