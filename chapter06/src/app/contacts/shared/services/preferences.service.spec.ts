@@ -44,14 +44,16 @@ describe('PreferencesService', () => {
   });
 
   // check that the service is setup right
-  it('should create the Preferences Service', inject([PreferencesService], (service: PreferencesService) => {
+  it('should create the Preferences Service', inject([PreferencesService],
+    (service: PreferencesService) => {
     expect(service).toBeTruthy();
   }));
 
   describe('save preferences', () => {
 
     // uses inject to get BrowserStorageMock
-    it('should save a preference', inject([PreferencesService, BrowserStorage], (service: PreferencesService, browserStorage: BrowserStorageMock) => {
+    it('should save a preference', inject([PreferencesService, BrowserStorage],
+      (service: PreferencesService, browserStorage: BrowserStorageMock) => {
 
         // add a spy to browserStorage.setItem
         spyOn(browserStorage, 'setItem').and.callThrough();
