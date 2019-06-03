@@ -12,7 +12,7 @@ import { ContactService } from './contact.service';
 describe('ContactsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [ HttpClientTestingModule ], // configure TestBed to use HttpClientTestingModule
       providers: [ ContactService ]
     });
   });
@@ -25,6 +25,7 @@ describe('ContactsService', () => {
 
     beforeEach(() => {
       contactService = TestBed.get(ContactService);
+      // assign a reference to the HttpTestingController for interacting with the HttpClientTestingModule
       httpTestingController = TestBed.get(HttpTestingController);
       mockContact = { id: 100, name: 'Erin Dee', email: 'edee@example.com' };
     });
@@ -32,14 +33,17 @@ describe('ContactsService', () => {
     it('should GET a list of contacts', () => {
       // with OBSERVABLES instead of then, you use subscribe. Observable callbacks are called whenever new values are emitted from an observable
         // on the other hand, promises are only resolved once
+      // exercise the getContacts service method that makes a call to the server, which emits an observable later
       contactService.getContacts().subscribe((contacts) => {
         expect(contacts[0]).toEqual(mockContact);
       });
 
       const request = httpTestingController.expectOne('app/contacts');
 
+      // causes the observable in #C to run
       request.flush([mockContact]);
 
+      // verifies there are no  outstanding requests
       httpTestingController.verify();
     });
   });

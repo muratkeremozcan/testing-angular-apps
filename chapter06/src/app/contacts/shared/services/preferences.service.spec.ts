@@ -2,9 +2,10 @@
 /* SERVICES
 Services are the part of your application that do not generally interact with the UI.
   They allow you to write non-UI code that's modular, reusable and testable
+  They are singletons; you write them once and can use them anywhere in the application
 Angular services implement the @Injectable class decorator, which adds metadata that Angular uses for resolving dependencies
 Angular uses the class itself to create a provider token that other components will use for defining provider dependencies
-A Service is instantiated only once. Components that define that services as a dependency will share that instance,
+A Service is instantiated only once. Components that define that service as a dependency will share that instance,
   which allows for services to act as brokers for sharing data between components and saves memory use
 
 DEPENDENCY INJECTION is a system that supplies instances of a dependency at the time your class is instantiated:
@@ -35,6 +36,8 @@ describe('PreferencesService', () => {
   beforeEach(() => {
     // TestBed is configured with PreferencesService before every test
       // BrowserStorageMock is used instead of the real service BrowserStorage
+      // By using the token from BrowserStorage and supplying the same methods, you can use your mock for unit testing instead of relying on the real implementation
+      // You only need to configure TestBed to use BrowserStorageMock whenever a service calls for BrowserStorage as a dependency
     TestBed.configureTestingModule({
       providers: [PreferencesService, {
         provide: BrowserStorage, useClass: BrowserStorageMock
@@ -64,7 +67,8 @@ describe('PreferencesService', () => {
       })
     );
 
-    it('saveProperty should require a non-zero length key', inject([PreferencesService], (service: PreferencesService) => {
+    it('saveProperty should require a non-zero length key', inject([PreferencesService],
+      (service: PreferencesService) => {
 
         // creates a wrapper for any function that's supposed to throw an error
         const throws = () => service.saveProperty({ key: '', value: 'foo' });
@@ -84,6 +88,8 @@ describe('PreferencesService', () => {
 
     it(`returns a ContactPreference`, inject([PreferencesService, BrowserStorage],
       (service: PreferencesService, browserStorage: BrowserStorageMock) => {
+
+        // add a spy to browserStorage.getItem
         spyOn(browserStorage, 'getItem').and.returnValue({ 'key': 'pref', value: 'myValue' });
 
         const prefs = service.getProperty('getItem');
