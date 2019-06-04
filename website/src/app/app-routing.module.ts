@@ -7,7 +7,7 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
 import { NewContactComponent } from './contacts/new-contact/new-contact.component';
 import { PageNotFoundComponent } from './page-not-found-component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: ContactsComponent },
   { path: 'add', component: NewContactComponent },
   { path: 'contacts', component: ContactsComponent },
