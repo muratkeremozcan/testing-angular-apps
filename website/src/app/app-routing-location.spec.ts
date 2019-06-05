@@ -1,10 +1,11 @@
+// listing 7.1 7.2 7.3 7.4 7.5
+
 import { Component, DebugElement, Injectable, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { By } from '@angular/platform-browser';
 import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
 import { RouterTestingModule } from "@angular/router/testing";
 import { Router } from "@angular/router";
-
 
 // routers are used to convert a url path to destination in the web application
 // a router can be used to verify a user's credentials for access
@@ -67,7 +68,7 @@ describe('Testing routes', () => {
       declarations: [NavigationMenu, SimpleComponent, AppComponent],
     });
   });
-  // the router will the initial page and advance the Angular application to settle any asynchronous events
+  // the router will initialize the page and advance the Angular application to settle any asynchronous events
     // when navigation event occurs it resolves asynchronously and you have to account for it in the test
   beforeEach(fakeAsync(() => {
     router = TestBed.get(Router);
