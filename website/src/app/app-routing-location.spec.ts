@@ -38,13 +38,13 @@ class NavigationMenu implements OnInit {
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
 })
-class AppComponent { }
+class AppComponent { } // AppComponent test fixture tests the component
 
 @Component({
   selector: 'simple-component',
   template: 'simple'
 })
-class SimpleComponent { }
+class SimpleComponent { } // SimpleComponent stands in as the target component in the test route configuration
 
 describe('Testing routes', () => {
   let fixture;
