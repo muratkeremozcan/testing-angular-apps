@@ -12,12 +12,17 @@ import { Router } from "@angular/router";
 // the process of starting and completing a route change is called life cycle
   // route guard: the check for whether a route change can continue
 
+// you can test routers in 2 ways
+  // 1: test how components receive values from the router (this example)
+  // 2: test route guards
+
 @Injectable()
 class NavConfigService {
   menu = [{ label: 'Home', path: '/target/12'}]
 }
 
 // this is the component under test. It generates navigation links
+// Angular components can navigate to other parts of an application by including the routerLink directive
 @Component({
   selector: `navigation-menu`,
   template: `<div><a *ngFor="let item of menu" [id]="item.label" [routerLink]="item.path">{{ item.label }}</a></div>`,
@@ -49,18 +54,19 @@ class SimpleComponent { } // SimpleComponent stands in as the target component i
 describe('Testing routes', () => {
   let fixture;
   let router: Router;
+  // when testing navigation components, you use Location service to verify navigation path is correct
   let location: Location;
 
 
   beforeEach(() => {
-    // configure RouterTestingModule with fake testing routes.
+    // configure RouterTestingModule with fake testing routes (default path and target/:id)
     // RouterTestingModule spies on navigation calls and makes their results available in the tests
-      // TestBed uses RouterTestingModule. Before each test the RouterTestingModule loads the default route and updates the test fixture
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
         { path: '', component: NavigationMenu },
         { path: 'target/:id', component: SimpleComponent }
       ])],
+      // TestBed uses RouterTestingModule. Before each test the RouterTestingModule loads the default route and updates the test fixture
       providers: [{
         provide: NavConfigService,
         useValue: { menu: [{ label: 'Home', path: '/target/fakeId' }] }
@@ -68,14 +74,14 @@ describe('Testing routes', () => {
       declarations: [NavigationMenu, SimpleComponent, AppComponent],
     });
   });
-  // the router will initialize the page and advance the Angular application to settle any asynchronous events
-    // when navigation event occurs it resolves asynchronously and you have to account for it in the test
   beforeEach(fakeAsync(() => {
+    // the router will initialize the page and advance the Angular application to settle any asynchronous events
     router = TestBed.get(Router);
     location = TestBed.get(Location);
     fixture = TestBed.createComponent(AppComponent);
     // starts each test by navigating to the default route
     router.navigateByUrl('/');
+    // when navigation event occurs it resolves asynchronously and you have to account for it in the test
     advance();
   }));
 
@@ -87,11 +93,12 @@ describe('Testing routes', () => {
     fixture.detectChanges();
   }
 
-  // this test gets a copy to a link, clicks it and checks with the Location service to see if the path updated to the expected target
   it('Tries to route to a page', fakeAsync(() => {
+    // this test gets a copy to a link, clicks it
     const menu = fixture.debugElement.query(By.css('a'));
     menu.triggerEventHandler('click', { button: 0 });
     advance();
+    // checks with the Location service to see if the path updated to the expected target
     expect(location.path()).toEqual('/target/fakeId');
   }));
 

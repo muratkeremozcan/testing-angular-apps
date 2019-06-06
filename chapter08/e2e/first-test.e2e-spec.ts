@@ -6,7 +6,6 @@ describe('our first Protractor test', () => {
   it('should load a page and verify the url', async() => {
     await browser.get('/');
     const currentUrl = await browser.getCurrentUrl();
-    console.log('current url is :', currentUrl);
     expect(currentUrl).toEqual(browser.baseUrl + '/#/');
   });
 });

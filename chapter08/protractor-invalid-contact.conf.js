@@ -11,6 +11,11 @@ exports.config = {
   baseUrl: 'https://testing-angular-applications.github.io',
   
   framework: 'jasmine',
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 30000,
+    print: function() { }
+  },
   specs: [
     './e2e/invalid-contact.e2e-spec.ts'
   ],

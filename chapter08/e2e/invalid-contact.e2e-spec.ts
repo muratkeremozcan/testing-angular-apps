@@ -1,31 +1,32 @@
-import {browser, by, element, ExpectedConditions as EC} from 'protractor';
+import { browser, by, element, ExpectedConditions as EC } from 'protractor';
+import { async } from 'q';
 
 describe('adding a new contact', () => {
   describe('with an invalid email', () => {
-    beforeEach(() => {
+    beforeEach(async() => {
       browser.get('/#/add');
-      element(by.id('contact-name')).sendKeys('Bad Email');
+      await element(by.id('contact-name')).sendKeys('Bad Email');
     });
 
-    it('should not create a new contact with baduser.com', () => {
+    it('should not create a new contact with baduser.com', async() => {
       let email = element(by.id('contact-email'));
-      email.sendKeys('baduser.com');
-      element(by.buttonText('Create')).click();
+      await email.sendKeys('baduser.com');
+      await element(by.buttonText('Create')).click();
 
       let invalidEmailModal = element(by.tagName('app-invalid-email-modal'));
       expect(invalidEmailModal.isPresent()).toBe(true);
 
       let modalButton = invalidEmailModal.element(by.tagName('button'));
-      modalButton.click();
+      await modalButton.click();
 
-      browser.wait(EC.not(EC.presenceOf(invalidEmailModal)), 5000);
-      expect(invalidEmailModal.isPresent()).toBe(false);
-      expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/#/add');
+      await browser.wait(EC.not(EC.presenceOf(invalidEmailModal)), 20000);
+      expect(await invalidEmailModal.isPresent()).toBe(false);
+      expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + '/#/add');
     });
 
-    it('should not create a new contact with @baduser.com', () => {
+    it('should not create a new contact with @baduser.com', async() => {
       let email = element(by.id('contact-email'));
-      email.sendKeys('@baduser.com');
+      await email.sendKeys('@baduser.com');
       let invalidEmailModal = element(by.tagName('app-invalid-email-modal'));
       expect(invalidEmailModal.isPresent()).toBe(false);
     });
@@ -37,18 +38,17 @@ describe('adding a new contact', () => {
       element(by.id('contact-name')).sendKeys('Bad Tel');
     });
 
-    it('should not create a new contact with a formatted telephone number',
-      () => {
+    it('should not create a new contact with a formatted telephone number', async() => {
         let tel = element(by.css('input[type="tel"]'));
         tel.sendKeys('123-456-7890');
         element(by.buttonText('Create')).click();
         let invalidTelModal =
-            element(by.tagName('app-invalid-phone-number-modal'));
+          element(by.tagName('app-invalid-phone-number-modal'));
         expect(invalidTelModal.isDisplayed()).toBe(true);
         let modalButton = invalidTelModal.element(by.tagName('button'));
         modalButton.click();
 
-        browser.wait(EC.not(EC.presenceOf(invalidTelModal)), 5000);
+        browser.wait(EC.not(EC.presenceOf(invalidTelModal)), 20000);
         expect(invalidTelModal.isPresent()).toBe(false);
         expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/#/add');
       });
@@ -59,7 +59,7 @@ describe('adding a new contact', () => {
         tel.sendKeys('12345678901');
         element(by.buttonText('Create')).click();
         let invalidTelModal =
-            element(by.tagName('app-invalid-phone-number-modal'));
+          element(by.tagName('app-invalid-phone-number-modal'));
         browser.wait(EC.visibilityOf(invalidTelModal), 5000);
         expect(invalidTelModal.isDisplayed()).toBe(true);
         let modalButton = invalidTelModal.element(by.tagName('button'));

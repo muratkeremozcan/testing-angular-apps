@@ -1,21 +1,22 @@
+// listing 8.9
 import {browser, by, element, ExpectedConditions as EC} from 'protractor';
 
 describe('adding a new contact with name, email, and phone number', () => {
-  beforeAll(() => {
+  beforeAll(async() => {
     browser.get('/#/');
-    element(by.id('add-contact')).click();
-    element(by.id('contact-name')).sendKeys('Grace\'s Directive');
+    await element(by.id('add-contact')).click();
+    await element(by.id('contact-name')).sendKeys('Grace\'s Directive');
   });
 
-  it('should send an email address', () => {
+  it('should send an email address', async() => {
     let email = element(by.id('contact-email'));
-    email.sendKeys('grace@example.com');
-    expect(email.getAttribute('value')).toEqual('grace@example.com');
+    await email.sendKeys('grace@example.com');
+    expect(await email.getAttribute('value')).toEqual('grace@example.com');
   });
 
-  it('should send a phone number', () => {
+  it('should send a phone number', async() => {
     let tel = element(by.css('input[type="tel"]'));
-    tel.sendKeys('1234567890');
-    expect(tel.getAttribute('value')).toEqual('1234567890');
+    await tel.sendKeys('1234567890');
+    expect(await tel.getAttribute('value')).toEqual('1234567890');
   });
 });

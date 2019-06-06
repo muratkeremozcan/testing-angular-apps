@@ -6,6 +6,8 @@ import { TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { RouterTestingModule } from "@angular/router/testing";
 import { Router, CanActivate } from "@angular/router";
 
+// 2: testing route guards.
+// if a route guard method returns true, navigation attempt can continue
 
 // a fake service is used to demonstrate separating the responsibility of the route guard from the user authentication service
 @Injectable()
@@ -22,7 +24,7 @@ class UserAuthentication {
 // the route guard implements the CanActivate interface which is the focus of the test
 @Injectable()
 class AuthenticationGuard implements CanActivate {
-  constructor(private userAuth: UserAuthentication) {}
+  constructor(private userAuth: UserAuthentication) { }
   canActivate(): Promise<boolean> | boolean {
     return new Promise((resolve) => resolve(this.userAuth.getAuthenticated()));
   }
@@ -48,25 +50,29 @@ describe('Testing routing guards', () => {
   let fixture;
   let userAuthService;
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    // uses RouterTestingModule
-    imports: [RouterTestingModule.withRoutes([
-      { path: '', component: AppComponent },
-      {
-        path: 'protected',
-        component: TargetComponent,
-        // specifies the route guard for the test
-        canActivate: [AuthenticationGuard],
-      },
-    ])],
-    providers: [AuthenticationGuard, UserAuthentication],
-    declarations: [TargetComponent, AppComponent],
-  });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      // uses RouterTestingModule
+      // RouterTestingModule helps you write tests for your components that interact with the router by providing test router configurations
+        // and inspecting the calls to the router itself
+      imports: [RouterTestingModule.withRoutes([
+        { path: '', component: AppComponent },
+        {
+          path: 'protected',
+          component: TargetComponent,
+          // specifies the route guard for the test
+          canActivate: [AuthenticationGuard],
+        },
+      ])],
+      providers: [AuthenticationGuard, UserAuthentication],
+      declarations: [TargetComponent, AppComponent],
+    });
+    // AuthenticationGuard will check UserAuthentication when the route nav attempt occurs
 
     router = TestBed.get(Router);
     location = TestBed.get(Location);
     // allows the authentication check to pass
+    // you capture a reference to the service and control it during the test
     userAuthService = TestBed.get(UserAuthentication);
   });
 
@@ -76,7 +82,7 @@ beforeEach(() => {
   }));
 
   it('tries to route to a page without authentication', fakeAsync(() => {
-    // triest to navigate to the protected route before authentication
+    // tries to navigate to the protected route before authentication
     router.navigate(['protected']);
     flush();
     expect(location.path()).toEqual('/');
