@@ -13,9 +13,14 @@ describe('the contact list', () => {
   });
 
   it('with filter: should find existing contact "Craig Service"', () => {
+    // first find the tbody web element using the by.tagName locator
     let tbody = element(by.tagName('tbody'));
+    // within the tbody get all the table rows and assign them to trs
     let trs = tbody.all(by.tagName('tr'));
+    // next, filter the table rows in trs to find the one we want
+      // when FILTER is called, the returned object is an array of web elements that satisfy the callback function
     let craigService = trs.filter(elem => {
+      // pass filter a callback function that evaluates to true if the text in the row matches 'Craig Service'
       // The tds: 0 = mood, 1 = name, 2 = email, 3 = phone number
       return elem.all(by.tagName('td')).get(1).getText().then(text => {
         return text === 'Craig Service';
@@ -25,8 +30,8 @@ describe('the contact list', () => {
     // filter function, it is not executed until we use it. When you use it, the
     // promises enter the control flow and are resolved. This is similar to
     // calling element(), nothing happens until you do something like getText().
-    expect(craigService.count()).toBeGreaterThan(0);
-    expect(craigService.all(by.tagName('td')).get(2).getText())
+    expect(craigService.count()).toBeGreaterThan(0); // verify that craigService exists
+    expect(craigService.all(by.tagName('td')).get(2).getText()) // verify the third colum is the correct email address
         .toEqual('craig.services@example.com');
   });
 
@@ -54,8 +59,12 @@ describe('the contact list', () => {
   ];
 
   it('with map: should create a map object', () => {
+    // first find the tbody web element using the by.tagName locator
     let tbody = element(by.tagName('tbody'));
+    // within the tbody get all the table rows and assign them to trs
     let trs = tbody.all(by.tagName('tr'));
+    // MAP converts elements returned from trs to an array
+    // for each contact, run the map function callback for each tr element
     let contactList = trs.map(elem => {
       let contact: Contact = {};
       let tds = elem.all(by.tagName('td'));
@@ -67,6 +76,8 @@ describe('the contact list', () => {
       // sets the contact's name. This function returns void so the final
       // promise saved is of Promise<void>. We set the promise array to be of
       // type any since we do not care about the promise type.
+
+      // gets the text, sets the value to the corresponding contact property, then push the promise to the promise array
       promises.push(tds.get(1).getText().then(text => {
         contact.name = text;
       }));
@@ -81,11 +92,11 @@ describe('the contact list', () => {
       return Promise.all(promises).then(() => {
         return contact;
       });
-    })
+    });
 
     // Check the results
     expect(contactList).toBeDefined();
-    contactList.then((contacts: Contact[]) => {
+    contactList.then((contacts: Contact[]) => { // cast the resolved contact list to a contact array
 
       // Spot check the results
       expect(contacts.length).toEqual(4);
@@ -100,9 +111,14 @@ describe('the contact list', () => {
   });
 
   it('with reduce: get a list of contact names', () => {
+    // first find the tbody web element using the by.tagName locator
     let tbody = element(by.tagName('tbody'));
+    // within the tbody get all the table rows and assign them to trs
     let trs = tbody.all(by.tagName('tr'));
+    // the reduce function applies a callback to each element of the array and accumulates the result in a single value
     let contacts = trs.reduce((acc, curr) => {
+      // the curr parameter represents the table row element
+        // the callback gets the text from the first column. Then you take the text and concatenate it into the accumulator
       let name = curr.all(by.tagName('td')).get(1);
       return name.getText().then(text => {
         return acc === '' ? text : acc + ', ' + text;

@@ -18,7 +18,8 @@ describe('adding a new contact', () => {
 
       let modalButton = invalidEmailModal.element(by.tagName('button'));
       await modalButton.click();
-
+      // ExpectedConditions API combined with browser.wait method allows the test to wait for some condition
+        // to occur on the web application withing a set period of time
       await browser.wait(EC.not(EC.presenceOf(invalidEmailModal)), 20000);
       expect(await invalidEmailModal.isPresent()).toBe(false);
       expect(await browser.getCurrentUrl()).toEqual(browser.baseUrl + '/#/add');
@@ -60,11 +61,11 @@ describe('adding a new contact', () => {
         element(by.buttonText('Create')).click();
         let invalidTelModal =
           element(by.tagName('app-invalid-phone-number-modal'));
-        browser.wait(EC.visibilityOf(invalidTelModal), 5000);
+        browser.wait(EC.visibilityOf(invalidTelModal), 20000);
         expect(invalidTelModal.isDisplayed()).toBe(true);
         let modalButton = invalidTelModal.element(by.tagName('button'));
         modalButton.click();
-        browser.wait(EC.not(EC.presenceOf(invalidTelModal)), 5000);
+        browser.wait(EC.not(EC.presenceOf(invalidTelModal)), 20000);
         expect(invalidTelModal.isPresent()).toBe(false);
         expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/#/add');
       });
