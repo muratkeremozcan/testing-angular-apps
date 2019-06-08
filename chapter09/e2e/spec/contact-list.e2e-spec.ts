@@ -98,6 +98,7 @@ describe('feed dialog', () => {
     expect(followButton.isEnabled()).toBeTruthy();
   });
 
+  // instead of using an element inder from Protractor, this uses a JavaScript function that runs in the browser an returns an array of WebElements
   it('should enable the follow button with more than two posts using executeScript', () => {
     let feedButton = element(by.css('button.feed-button'));
     feedButton.click();
@@ -105,6 +106,7 @@ describe('feed dialog', () => {
     let followButton = element(by.css('button.follow'))
     expect(followButton.isEnabled()).toBeFalsy();
 
+    // retrieving elements with custom finder
     function findAllPosts() {
       return document.querySelectorAll('app-contact-feed mat-list-item')
     }
