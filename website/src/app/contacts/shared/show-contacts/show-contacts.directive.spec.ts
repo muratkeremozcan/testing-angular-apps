@@ -26,10 +26,12 @@ import { getElement } from '../../testing';
 class TestComponent { }
 
 describe('Directive: ShowContactsDirective', () => {
+  // part 1: declare the fixture variable
   // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
   let fixture: ComponentFixture<any>;
 
   beforeEach(() => {
+    // part 2 & 3: setup the TestBed and initialize the fixture variable
     // TestBed is a class that you use to setup and configure your tests
     // use it any time you want to write a unit test that tests components, directives and services
     // configureTestingModule configures the TestBed, we use declarations to specify how the TestBed is to be configured

@@ -27,13 +27,15 @@ import { ContactEditComponent } from './contact-edit.component';
 import '../../../material-app-theme.scss';
 
 describe('ContactEditComponent tests', () => {
+  // the setup of component tests includes 3 parts
+  // part 1 : declare the variables
+
   // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
-    // use the ComponentFixture class to debug an element
   let fixture: ComponentFixture<ContactEditComponent>; // the type is ContactEditComponent which we import on line 25
   // the component and rootElement are DISTINCT in COMPONENT TESTING
   let component: ContactEditComponent; // stores an instance of the ContactEditComponent
-  let rootElement: DebugElement; // stores the DebugElement for the component, which is how we access its children
   // you can think of DebugElement as the HTMLElement with methods and properties that can be useful for debugging elements
+  let rootElement: DebugElement; // stores the DebugElement for the component, which is how we access its children
 
   /* mock: simulates the real object, keeps track of when the object is called and the arguments it receives
   stub: simpler fake of the real object, no logic, always returns the same value
@@ -60,6 +62,8 @@ describe('ContactEditComponent tests', () => {
     }
   };
 
+  // part 2 of component test: setup the TestBed
+
   // sets TestBed configuration. TestBed is a class that you use to setup and configure your tests.
     // use it any time you want to write a unit test that tests components, directives and services
   beforeEach(() => {
@@ -76,7 +80,6 @@ describe('ContactEditComponent tests', () => {
       providers: [{ provide: ContactService, useValue: contactServiceStub }]
     });
 
-
     TestBed.overrideModule(BrowserDynamicTestingModule, {
       /* Distinct in COMPONENT TESTING:
          overrideModule is used to lazy load some components. Lazy load means dialogs won't be loaded until the user performs an action to
@@ -88,7 +91,8 @@ describe('ContactEditComponent tests', () => {
     });
   });
 
-  // sets instance variables
+  // part 3 of component test: initialize the variables
+
   beforeEach(() => {
     // fixture variable stores the component-like object from the TestBed.createComponent method
     fixture = TestBed.createComponent(ContactEditComponent);
@@ -116,13 +120,13 @@ describe('ContactEditComponent tests', () => {
       // set isLoading false to hide progress bar, otherwise all that will render is the loading progress bar
       component.isLoading = false;
       // normally saveContact would use the real ContactService
-        // but because you configured the testing module on line 50 to provide contactServiceStub, it will use the stub instead
+        // but because you configured the testing module on line 80 to provide contactServiceStub, it will use the stub instead
       component.saveContact(contact); // save the contact object
       // after you make changes, you need to call detectChanges so that those changes are rendered in the DOM
       fixture.detectChanges();
-      // query rootElement (defined at lines 21 &` 87) by using by.css for the contact-name class
+      // query rootElement (defined at lines 38 & 107) by using by.css for the contact-name class
         // to get the input element that contains the contact name
-      const nameInput = rootElement.query(By.css('.contact-name')); // gets the nameInput form field
+      const nameInput = rootElement.query(By.css('.contact-name')); // gets the nameInput form field contact-name
       tick(); // simulate the passage of time
       // nativeElement object is an Angular wrapper around the built-in DOM native element
       expect(nameInput.nativeElement.value).toBe('lorace'); // check to see if the name property has been set correctly

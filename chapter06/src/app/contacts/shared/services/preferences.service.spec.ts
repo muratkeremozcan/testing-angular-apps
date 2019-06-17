@@ -90,7 +90,7 @@ describe('PreferencesService', () => {
       (service: PreferencesService, browserStorage: BrowserStorageMock) => {
 
         // add a spy to browserStorage.getItem
-        spyOn(browserStorage, 'getItem').and.returnValue({ 'key': 'pref', value: 'myValue' });
+        spyOn(browserStorage, 'getItem').and.returnValue({ key: 'pref', value: 'myValue' });
 
         const prefs = service.getProperty('getItem');
         expect(prefs.key).toEqual('pref');

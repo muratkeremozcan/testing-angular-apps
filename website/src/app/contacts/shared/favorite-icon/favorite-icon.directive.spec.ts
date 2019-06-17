@@ -23,10 +23,13 @@ import { getStarElement, doClassesMatch } from '../../testing';
 class TestComponent { }
 
 describe('Directive: FavoriteIconDirective', () => {
+  // part 1 : declare the variables
+
   // fixture: stores an instance of the ComponentFixture, which contains methods that help debug and test a component
   let fixture: ComponentFixture<any>; // type is any because this is our made up component as opposed to testing a real one in COMPONENT T.
   const expectedSolidStarList = constants.classes.SOLID_STAR_STYLE_LIST; // an array of classes for a solid star
   const expectedOutlineStarList = constants.classes.OUTLINE_STAR_STYLE_LIST; // an array of classes for an outlined star
+
 
   beforeEach(() => {
     // declare the testModuleMetadata to contain the information needed to configure TestBed
@@ -41,6 +44,7 @@ describe('Directive: FavoriteIconDirective', () => {
       // use it any time you want to write a unit test that tests components, directives and services
     // the fixture variable stores the component-like object from the TestBed.createComponent method
       // createComponent is used to return an instance of ComponentFixture
+    // part 2 & 3: setup the TestBed and initialize the fixture variable
     fixture = TestBed.configureTestingModule(testModuleMetadata).createComponent(TestComponent);
     // detectChanges: invoke change detection in unit tests and render updated data whenever an event occurs
     fixture.detectChanges();

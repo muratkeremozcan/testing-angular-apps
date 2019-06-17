@@ -24,11 +24,14 @@ describe('ContactsComponent tests', () => {
   });
 
   it('should be contacts if there is data', () => {
+    // create a new contact of type Contact (using the Contact interface)
     const newContact: Contact = {
       id: 1,
       name: 'Jason Pipemaker'
     };
+    // add it to an array called contactList
     const contactList: Array<Contact> = [newContact];
+    // set the contacts property of the ContactsComponent to the contactList array
     contactsComponent.contacts = contactList;
     // assert that if a contact is added, then there should be 1 contact in the array
     expect(contactsComponent.contacts.length).toBe(1);
